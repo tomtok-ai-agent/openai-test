@@ -10,8 +10,14 @@ This Python application retrieves the current date and uses OpenAI's API to gene
 
 - Gets the current date automatically
 - Uses OpenAI's API to generate a unique poem
-- Handles API errors gracefully
+- Handles API errors gracefully with detailed feedback
 - Secure API key management using environment variables
+- Response caching to reduce API calls and costs
+- API usage tracking for monitoring token consumption
+- Comprehensive logging system
+- Extensive CLI options for customization
+- Modular architecture for easy extension
+- Test suite with mocking support
 
 ## Requirements
 
@@ -39,12 +45,108 @@ export OPENAI_API_KEY="your-api-key-here"
 
 ## Usage
 
+### Basic Usage
+
 Run the application using Poetry:
 ```bash
 poetry run python -m openai_test.main
 ```
 
 The application will display the current date and generate a poem about it.
+
+### Advanced CLI Options
+
+The application supports various command-line options:
+
+```bash
+poetry run python -m openai_test.main --help
+```
+
+Available options:
+
+| Option | Description |
+|--------|-------------|
+| `--date DATE` | Date to generate poem about (default: today). Format: 'Month Day, Year' |
+| `--model MODEL` | OpenAI model to use (default: gpt-3.5-turbo) |
+| `--temperature TEMP` | Temperature parameter for generation (default: 0.7) |
+| `--max-tokens TOKENS` | Maximum tokens to generate (default: 500) |
+| `--log-level LEVEL` | Logging level: DEBUG, INFO, WARNING, ERROR (default: INFO) |
+| `--no-cache` | Disable response caching |
+| `--clear-cache` | Clear response cache before generating |
+| `--show-usage` | Show API usage summary after generation |
+
+### Examples
+
+Generate a poem about a specific date:
+```bash
+poetry run python -m openai_test.main --date "December 25, 2025"
+```
+
+Use a different model with higher creativity:
+```bash
+poetry run python -m openai_test.main --model "gpt-4" --temperature 0.9
+```
+
+Generate a shorter poem:
+```bash
+poetry run python -m openai_test.main --max-tokens 200
+```
+
+View API usage statistics:
+```bash
+poetry run python -m openai_test.main --show-usage
+```
+
+Force a fresh response by bypassing cache:
+```bash
+poetry run python -m openai_test.main --no-cache
+```
+
+## Caching System
+
+The application includes a response caching system to reduce API calls and costs. When you request a poem with the same parameters (date, model, temperature, etc.), the application will use the cached response if available.
+
+### Cache Configuration
+
+By default, cache entries expire after 24 hours. The cache is stored in `~/.openai_poem/cache/`.
+
+### Cache Management
+
+You can manage the cache using these CLI options:
+
+- `--no-cache`: Bypass the cache and force a new API call
+- `--clear-cache`: Clear expired cache entries before generating a new poem
+
+## API Usage Tracking
+
+The application tracks API usage to help monitor costs and usage patterns. Usage data is stored in `~/.openai_poem/usage.json`.
+
+### Viewing Usage Statistics
+
+Use the `--show-usage` option to display usage statistics after generating a poem:
+
+```bash
+poetry run python -m openai_test.main --show-usage
+```
+
+This will show:
+- Total number of API requests
+- Total tokens consumed
+- Today's usage breakdown
+- Per-model statistics
+
+## Logging
+
+The application uses a comprehensive logging system that logs to both console and file:
+
+- Console: Shows high-level information by default
+- File: Logs detailed information to `openai_poem.log`
+
+You can adjust the logging level using the `--log-level` option:
+
+```bash
+poetry run python -m openai_test.main --log-level DEBUG
+```
 
 ## Security
 
@@ -94,3 +196,17 @@ The application validates the format of your API key before making requests to e
 - Contain only valid characters
 
 If your API key is rejected, please verify that you're using a valid OpenAI API key and that it's correctly set in your environment.
+
+## Testing
+
+The project includes a comprehensive test suite:
+
+```bash
+poetry run pytest
+```
+
+The tests use mocking to avoid actual API calls, making them suitable for CI/CD pipelines.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
