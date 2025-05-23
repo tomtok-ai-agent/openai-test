@@ -1,0 +1,17 @@
+[project]
+name = "openai-test"
+version = "0.1.0"
+description = "A console application that uses OpenAI API to generate a poem about the current date"
+authors = [
+    {name = "Ai Agent"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "openai (>=1.82.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
