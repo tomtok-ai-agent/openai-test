@@ -11,6 +11,7 @@ import argparse
 from .config import SYSTEM_PROMPT, USER_PROMPT_TEMPLATE
 from .api.client_factory import ClientFactory
 from .utils.date_utils import get_current_date
+from .utils.security import validate_api_key
 
 # Setup logging
 logging.basicConfig(
@@ -42,6 +43,10 @@ def generate_poem(date_str):
     
     if not api_key:
         return "Error: OPENAI_API_KEY environment variable not set. Please set it before running the application."
+    
+    # Validate API key format
+    if not validate_api_key(api_key):
+        return "Error: OPENAI_API_KEY has invalid format. Please check your API key."
     
     try:
         # Create OpenAI client
