@@ -177,7 +177,10 @@ class OpenAIClient:
                     prompt_tokens=len(system_prompt) + len(user_prompt),
                     success=False
                 )
-            raise APIError(f"OpenAI API returned an error: {str(e)}")
+            # Create a mock request object to satisfy APIError.__init__ requirements
+            # This fixes the "APIError.__init__() missing 1 required positional argument: 'request'" error
+            mock_request = {"method": "POST", "url": "https://api.openai.com/v1/chat/completions"}
+            raise APIError(f"OpenAI API returned an error: {str(e)}", request=mock_request)
             
         except Exception as e:
             logger.error(f"Unexpected error generating text: {str(e)}")
