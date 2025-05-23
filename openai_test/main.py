@@ -7,6 +7,7 @@ to generate a poem about that date.
 
 import os
 import argparse
+import logging
 from openai import AuthenticationError, RateLimitError, APIConnectionError, APIError, BadRequestError
 
 from .config import SYSTEM_PROMPT, USER_PROMPT_TEMPLATE
@@ -18,12 +19,16 @@ from .utils.logging_utils import setup_logging
 # Setup logging
 logger = setup_logging()
 
-def generate_poem(date_str):
+def generate_poem(date_str, model=None, temperature=None, max_tokens=None, use_cache=True):
     """
     Generate a poem about the given date using OpenAI's API.
     
     Args:
         date_str (str): The date to generate a poem about
+        model (str, optional): OpenAI model to use
+        temperature (float, optional): Temperature parameter for generation
+        max_tokens (int, optional): Maximum tokens to generate
+        use_cache (bool, optional): Whether to use response caching
         
     Returns:
         str: The generated poem or error message
@@ -48,7 +53,7 @@ def generate_poem(date_str):
     
     try:
         # Create OpenAI client
-        client = ClientFactory.create_openai_client(api_key=api_key)
+        client = ClientFactory.create_openai_client(api_key=api_key, use_cache=use_cache)
         
         # Format the user prompt with the date
         user_prompt = USER_PROMPT_TEMPLATE.format(date=date_str)
@@ -56,7 +61,10 @@ def generate_poem(date_str):
         # Generate the poem
         poem = client.generate_text(
             system_prompt=SYSTEM_PROMPT,
-            user_prompt=user_prompt
+            user_prompt=user_prompt,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens
         )
         
         logger.info("Poem generated successfully")
@@ -100,6 +108,12 @@ def parse_arguments():
                         help="Maximum tokens to generate (default: 500)")
     parser.add_argument("--log-level", type=str, choices=["DEBUG", "INFO", "WARNING", "ERROR"], default="INFO",
                         help="Logging level (default: INFO)")
+    parser.add_argument("--no-cache", action="store_true",
+                        help="Disable response caching")
+    parser.add_argument("--clear-cache", action="store_true",
+                        help="Clear response cache before generating")
+    parser.add_argument("--show-usage", action="store_true",
+                        help="Show API usage summary after generation")
     
     return parser.parse_args()
 
@@ -113,6 +127,12 @@ def main():
     # Parse arguments
     args = parse_arguments()
     
+    # Set logging level
+    if args.log_level:
+        numeric_level = getattr(logging, args.log_level.upper(), None)
+        if numeric_level:
+            logger.setLevel(numeric_level)
+    
     print("OpenAI Poem Generator")
     print("=====================")
     
@@ -123,15 +143,57 @@ def main():
         current_date = get_current_date()
     
     print(f"\nDate: {current_date}")
+    
+    # Clear cache if requested
+    if args.clear_cache:
+        try:
+            client = ClientFactory.create_openai_client()
+            cleared = client.clear_cache()
+            print(f"\nCleared {cleared} cached responses")
+        except Exception as e:
+            print(f"\nError clearing cache: {str(e)}")
+    
     print("\nGenerating poem...")
     
     # Generate a poem about the current date
-    poem = generate_poem(current_date)
+    poem = generate_poem(
+        date_str=current_date,
+        model=args.model,
+        temperature=args.temperature,
+        max_tokens=args.max_tokens,
+        use_cache=not args.no_cache
+    )
     
     # Print the generated poem
     print("\nYour poem about this date:\n")
     print(poem)
     print("\n=====================")
+    
+    # Show usage summary if requested
+    if args.show_usage:
+        try:
+            client = ClientFactory.create_openai_client()
+            usage = client.get_usage_summary()
+            
+            if usage:
+                print("\nAPI Usage Summary:")
+                print(f"Total requests: {usage['total_requests']}")
+                print(f"Total tokens: {usage['total_tokens']}")
+                
+                # Show today's usage if available
+                import datetime
+                today = datetime.datetime.now().strftime("%Y-%m-%d")
+                if today in usage["requests_by_date"]:
+                    today_usage = usage["requests_by_date"][today]
+                    print(f"\nToday's usage:")
+                    print(f"  Requests: {today_usage['requests']}")
+                    print(f"  Tokens: {today_usage['tokens']}")
+                    print(f"  Successful: {today_usage['successful_requests']}")
+                    print(f"  Failed: {today_usage['failed_requests']}")
+            else:
+                print("\nNo usage data available")
+        except Exception as e:
+            print(f"\nError retrieving usage data: {str(e)}")
 
 if __name__ == "__main__":
     main()
