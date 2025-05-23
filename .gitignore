@@ -21,3 +21,7 @@ ENV/
 .vscode/
 *.swp
 *.swo
+
+# Log files
+*.log
+openai_poem.log
