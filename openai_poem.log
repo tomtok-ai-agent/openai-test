@@ -1,0 +1,30 @@
+2025-05-23 13:16:17,884 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:16:18,038 - openai_poem.api - INFO - Generating text using model: gpt-3.5-turbo
+2025-05-23 13:16:21,255 - openai_poem.api - INFO - Text generated successfully
+2025-05-23 13:16:21,255 - openai_poem - INFO - Poem generated successfully
+2025-05-23 13:16:47,284 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:16:47,284 - openai_poem - ERROR - OPENAI_API_KEY has invalid format
+2025-05-23 13:16:47,335 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:16:47,335 - openai_poem - ERROR - OPENAI_API_KEY environment variable not set
+2025-05-23 13:16:47,338 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:16:47,338 - openai_poem - ERROR - OPENAI_API_KEY has invalid format
+2025-05-23 13:16:47,342 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:16:47,342 - openai_poem - ERROR - OPENAI_API_KEY has invalid format
+2025-05-23 13:16:47,398 - openai_poem.api - INFO - Generating text using model: gpt-3.5-turbo
+2025-05-23 13:16:47,399 - openai_poem.api - INFO - Text generated successfully
+2025-05-23 13:16:47,404 - openai_poem.api - INFO - Generating text using model: gpt-3.5-turbo
+2025-05-23 13:16:47,404 - openai_poem.api - INFO - Using cached response
+2025-05-23 13:18:04,544 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:18:04,544 - openai_poem - INFO - Poem generated successfully
+2025-05-23 13:18:04,547 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:18:04,547 - openai_poem - ERROR - OPENAI_API_KEY environment variable not set
+2025-05-23 13:18:04,549 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:18:04,549 - openai_poem - ERROR - OPENAI_API_KEY has invalid format
+2025-05-23 13:18:04,553 - openai_poem - INFO - Generating poem about date: May 23, 2025
+2025-05-23 13:18:04,553 - openai_poem - INFO - Poem generated successfully
+2025-05-23 13:18:04,558 - openai_poem.api - INFO - Generating text using model: gpt-3.5-turbo
+2025-05-23 13:18:04,559 - openai_poem.api - INFO - Text generated successfully
+2025-05-23 13:18:04,564 - openai_poem.api - INFO - Generating text using model: gpt-3.5-turbo
+2025-05-23 13:18:04,565 - openai_poem.api - INFO - Using cached response
+2025-05-23 13:18:04,570 - openai_poem.api - INFO - Generating text using model: gpt-3.5-turbo
+2025-05-23 13:18:04,571 - openai_poem.api - ERROR - Unexpected error generating text: exceptions must derive from BaseException

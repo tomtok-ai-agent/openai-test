@@ -207,6 +207,37 @@ poetry run pytest
 
 The tests use mocking to avoid actual API calls, making them suitable for CI/CD pipelines.
 
+### Test Structure
+
+The test suite is organized in the `tests` directory with the following structure:
+
+- `test_openai_client.py`: Tests for the OpenAI API client wrapper
+- `test_main.py`: Tests for the main application functionality
+
+### Running Specific Tests
+
+You can run specific test files or test cases:
+
+```bash
+# Run a specific test file
+poetry run pytest tests/test_openai_client.py
+
+# Run tests with verbose output
+poetry run pytest -v
+
+# Run tests with specific markers
+poetry run pytest -m "not slow"
+```
+
+### Test Coverage
+
+The tests cover key functionality including:
+- OpenAI client text generation
+- Response caching
+- Error handling
+- Command-line interface
+- API usage tracking
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
